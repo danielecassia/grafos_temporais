@@ -19,13 +19,13 @@ INCLUDEDIR = include
 OBJDIR     = obj
 BINDIR     = bin
 
-DEPS = funciona
+DEPS = main
 
 SRC := $(addsuffix .cpp, $(DEPS))
 
 OBJ := $(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
 
-EXE := $(BINDIR)/tp1.out
+EXE := $(BINDIR)/tp2.out
 
 run:  all
 ### caso queira rodar o arquivo de teste utilizado no relatório, "descomente" a linha abaixo
