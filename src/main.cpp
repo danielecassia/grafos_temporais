@@ -3,15 +3,15 @@ using namespace std;  // Uso do namespace std para evitar a repetição de std::
 
 #define all(X) begin(X), end(X)
 
-struct Vertice {
-    int v;  // vertice(vila) que estou ligado
-    int a;  // final;
-    int l;  // tempo;
-    int c;  // custo;
+struct Conexao {
+    int v;  // vertice(vila) que estou conectado
+    int a;  // ano final de construção;
+    int l;  // tempo de travessia;
+    int c;  // custo de construção;
 };
 
 // Define um struct para representar o grafo
-typedef vector<Vertice> Grafo;
+typedef vector<Conexao> Grafo;
 
 
 int main() {
