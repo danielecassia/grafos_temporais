@@ -72,6 +72,8 @@ typedef vector<Bridge> Edge;
 // Função para imprimir os dados do grafo
 void printGraph(const Graph &g) {
     for (int i = 0; i < g.size(); ++i) {
+
+        // i+ 1 | g[i][j].vertex + 1 = u -> converte índice de volta para 1-based
         cout << "Vértice " << i + 1 << ":";
         for (int j=0; j< g[i].size(); j++) {
             cout << " -> (v: " << g[i][j].vertex + 1 << ", id: " << g[i][j].id << ")";
@@ -98,6 +100,7 @@ int main() {
     ll a, l, c;
     for (int i = 0; i < M; i++) {  // Itera sobre todas as conexões
         cin >> u >> v >> a >> l >> c;
+        // v-1 = i -> converte índice de volta para 0-based
         g[u - 1].push_back({v - 1, i});  // Adiciona a conexão (u -> v)
         g[v - 1].push_back({u - 1, i});  // Adiciona a conexão (v -> u)
         e.push_back({a, l, c});  // Adiciona os dados da ponte
