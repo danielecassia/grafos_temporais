@@ -17,7 +17,7 @@ typedef vector<Vertice> Grafo;
 int main() {
   int N, M;
   cin >> N >> M;  // Lê o número de vila (N) e o número de conexões (M)
-  cout<< N << " | " << M<<endl;  // Lê o número de vila (N) e o número de conexões (M)
+//   cout<< N << " | " << M<<endl;  // Lê o número de vila (N) e o número de conexões (M)
 
   Grafo g;
   g.resize(N);
@@ -30,7 +30,7 @@ int main() {
   }
 
   //  imprime o grafo criado
-  for (int i = 1; i < N+1; i++) {
+  for (int i = 1; i <= N; i++) {
     cout << "Conexão entre " << i << " e " << g[i].v<<endl;
     cout << "Ano final da construção: "<< g[i].a<<endl;
     cout << "Tempo de travessia: "<< g[i].l<<endl;
