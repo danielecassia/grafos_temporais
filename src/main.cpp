@@ -70,8 +70,8 @@ typedef vector<vector<Connection>> Graph;
 typedef vector<Bridge> Edge;
 
 // Função para imprimir os dados do grafo
-void printGraph(const Graph &g) {
-    for (int i = 0; i < g.size(); ++i) {
+void printGraph(const Graph &g, int M) {
+    for (int i = 0; i < M; ++i) {
 
         // i+ 1 | g[i][j].vertex + 1 = u -> converte índice de volta para 1-based
         cout << "Vértice " << i + 1 << ":";
@@ -83,8 +83,8 @@ void printGraph(const Graph &g) {
 }
 
 // Função para imprimir os dados das arestas
-void printEdges(const Edge &e) {
-    for (int i = 0; i < e.size(); ++i) {
+void printEdges(const Edge &e, int N) {
+    for (int i = 0; i < N; ++i) {
         cout << "Aresta " << i << ": ano = " << e[i].year << ", distância = " << e[i].dist << ", custo = " << e[i].cost << endl;
     }
 }
@@ -102,20 +102,27 @@ int main() {
     int u, v;
     ll a, l, c;
     for (int i = 0; i < M; i++) {  // Itera sobre todas as conexões
+        // faz leitura dos dados
         cin >> u >> v >> a >> l >> c;
-        // v-1 = i -> converte índice de volta para 0-based
-        g[u - 1].push_back({v - 1, i});  // Adiciona a conexão (u -> v)
-        g[v - 1].push_back({u - 1, i});  // Adiciona a conexão (v -> u)
-        e.push_back({a, l, c});  // Adiciona os dados da ponte
+
+        // v-- && u-- -> converte índice de volta para 0-based
+        v--; u--;
+
+        // adiona vertices no grafo
+        g[u].push_back({v, i});  // Adiciona a conexão (u -> v)
+        g[v].push_back({u, i});  // Adiciona a conexão (v -> u)
+
+        // adiciona aresta de conexao entre os vertices
+        e.push_back({a, l, c});  // Adiciona os dados da aresta
     }
 
     // Imprime os dados do grafo e das arestas
     cout << "Dados do Grafo:" << endl;
-    printGraph(g);
+    printGraph(g, M);
     cout << endl;
 
     cout << "Dados das Arestas:" << endl;
-    printEdges(e);
+    printEdges(e, N);
 
 
 
