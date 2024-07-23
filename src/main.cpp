@@ -70,8 +70,8 @@ typedef vector<vector<Connection>> Graph;
 typedef vector<Bridge> Edge;
 
 // Função para imprimir os dados do grafo
-void printGraph(const Graph &g, int M) {
-    for (int i = 0; i < M; ++i) {
+void printGraph(const Graph &g, int N) {
+    for (int i = 0; i < N; ++i) {
 
         // i+ 1 | g[i][j].vertex + 1 = u -> converte índice de volta para 1-based
         cout << "Vértice " << i + 1 << ":";
@@ -83,8 +83,8 @@ void printGraph(const Graph &g, int M) {
 }
 
 // Função para imprimir os dados das arestas
-void printEdges(const Edge &e, int N) {
-    for (int i = 0; i < N; ++i) {
+void printEdges(const Edge &e, int M) {
+    for (int i = 0; i < M; ++i) {
         cout << "Aresta " << i << ": ano = " << e[i].year << ", distância = " << e[i].dist << ", custo = " << e[i].cost << endl;
     }
 }
@@ -95,12 +95,15 @@ void printEdges(const Edge &e, int N) {
 int main() {
     int N, M;
     cin >> N >> M;  // Lê o número de vilas (N) e o número de conexões (M)
+    cout << M; 
     
     Graph g(N);
     Edge e;
 
     int u, v;
     ll a, l, c;
+
+
     for (int i = 0; i < M; i++) {  // Itera sobre todas as conexões
         // faz leitura dos dados
         cin >> u >> v >> a >> l >> c;
@@ -118,11 +121,11 @@ int main() {
 
     // Imprime os dados do grafo e das arestas
     cout << "Dados do Grafo:" << endl;
-    printGraph(g, M);
+    printGraph(g, N);
     cout << endl;
 
     cout << "Dados das Arestas:" << endl;
-    printEdges(e, N);
+    printEdges(e, M);
 
 
 
