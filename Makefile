@@ -42,7 +42,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 # Rule to build the main executable
 all: $(OBJ)
 	mkdir -p $(BINDIR)
-	$(LINKER) $(LFLAGS) $(OBJ) -o $(BINDIR)/tp1.out
+	$(LINKER) $(LFLAGS) $(OBJ) -o $(BINDIR)/tp2.out
 
 .PHONY: clean
 clean:
