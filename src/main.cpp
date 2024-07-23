@@ -22,10 +22,11 @@ int main() {
     Grafo g;
     g.resize(N);
 
-    for (int i = 0; i < M; i++) {  // Itera sobre todos os vértices
+    for (int i = 0; i < M; i++) {  // Itera sobre todos as conexões
         int u;
-        // faz leituras
+        // faz leitura de qual é a vila que saí a conexão
         cin >> u;
+        // faz leituras da vila conectada, ano final, tempo de travessia e custo
         cin >> g[u].v >> g[u].a >> g[u].l >> g[u].c;
     }
 
