@@ -89,6 +89,9 @@ void printEdges(const Edge &e) {
     }
 }
 
+// TODO: implementar o Dijkstra (+ ou MAX)
+    // ele ira retornar um subgrafo?
+
 int main() {
     int N, M;
     cin >> N >> M;  // Lê o número de vilas (N) e o número de conexões (M)
@@ -113,6 +116,19 @@ int main() {
 
     cout << "Dados das Arestas:" << endl;
     printEdges(e);
+
+
+
+    // 1. Distância mínima do palácio real -> cada vila
+        // TODO: chamar o Dijkstra (dist, +)
+    // (a) Primeiro ano em que todas as distâncias podem ser realizadas ao mesmo tempo
+        // TODO: das aresta que sao usado no grafo retornado, pegar o MAX dos anos
+
+    // 2. Qual o primeiro ano em que todo o reino é alcançável a partir do palácio real? (todas as vilas são alcançáveis)
+        // TODO: chamar o Dijkstra (ano, MAX)
+
+    // 3. Menor custo pra conectar tds as vilas = uma vila -> qualquer outra?
+        // TODO: chamar o Dijkstra (custo, +)
 
     return 0;
 }
