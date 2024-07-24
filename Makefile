@@ -19,7 +19,7 @@ INCLUDEDIR = include
 OBJDIR     = obj
 BINDIR     = bin
 
-DEPS = main
+DEPS = maratona
 
 SRC := $(addsuffix .cpp, $(DEPS))
 

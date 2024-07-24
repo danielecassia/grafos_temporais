@@ -1,49 +1,3 @@
-// #include <bits/stdc++.h>
-// using namespace std;  // Uso do namespace std para evitar a repetição de std::
-
-// #define all(X) begin(X), end(X)
-// #define ll long long int
-
-// // struct que representa a conexão entre um vertice a e outro b
-// struct Connection {
-//     pair<int, int> mudar;
-//     // int vertex;     // para qual vertice
-//     // int id;         // id da aresta
-// };
-
-// // struct para coletar os dsdos de custo da conexão
-// struct Bridge {
-//     ll year;
-//     ll dist;
-//     ll cost;
-// };
-
-// // representação do grafo
-// typedef vector<vector<Connection>> Graph;
-// // typedef vector<vector<pair<int, int>>> Graph;
-
-// // representação da aresta
-// typedef vector<Bridge> Edge;
-
-
-// int main(){
-
-//     int N, M;
-//     cin >> N >> M;  // Lê o número de vilas (N) e o número de conexões (M)
-//     Graph g;
-//     g.resize(N);
-
-//     Edge e;
-//     int u, v;
-//     ll a, l, c;
-//     for (int i = 0; i < M; i++) {  // Itera sobre todos as conexões
-//         cin >> u >> v >> a >> l >>c;
-//         g[i].push_back(v-1,i);
-//         g[v-1].push_back(i,i);
-//         e.push_back(a, l, c);
-//     }
-// }
-
 #include <bits/stdc++.h>
 using namespace std;  // Uso do namespace std para evitar a repetição de std::
 
@@ -52,12 +6,12 @@ using namespace std;  // Uso do namespace std para evitar a repetição de std::
 
 // struct que representa a conexão entre um vértice a e outro b
 struct Connection {
-    int vertex;  // para qual vértice
-    int id;      // id da aresta
+    int vertex;      // para qual vértice
+    int edgeID;     // id da aresta
 };
 
 // struct para coletar os dados de custo da conexão
-struct Bridge {
+struct EdgeData {
     ll year;
     ll dist;
     ll cost;
@@ -67,23 +21,22 @@ struct Bridge {
 typedef vector<vector<Connection>> Graph;
 
 // representação da aresta
-typedef vector<Bridge> Edge;
+typedef vector<EdgeData> EdgesList;
 
 // Função para imprimir os dados do grafo
 void printGraph(const Graph &g, int N) {
     for (int i = 0; i < N; ++i) {
-
         // i+ 1 | g[i][j].vertex + 1 = u -> converte índice de volta para 1-based
         cout << "Vértice " << i + 1 << ":";
         for (int j=0; j< g[i].size(); j++) {
-            cout << " -> (v: " << g[i][j].vertex + 1 << ", id: " << g[i][j].id << ")";
+            cout << " -> (v: " << g[i][j].vertex + 1 << ", edgeID: " << g[i][j].edgeID << ")";
         }
         cout << endl;
     }
 }
 
 // Função para imprimir os dados das arestas
-void printEdges(const Edge &e, int M) {
+void printEdges(const EdgesList &e, int M) {
     for (int i = 0; i < M; ++i) {
         cout << "Aresta " << i << ": ano = " << e[i].year << ", distância = " << e[i].dist << ", custo = " << e[i].cost << endl;
     }
@@ -91,6 +44,39 @@ void printEdges(const Edge &e, int M) {
 
 // TODO: implementar o Dijkstra (+ ou MAX)
     // ele ira retornar um subgrafo?
+// https://github.com/brunomaletta/Biblioteca/blob/master/Codigo/Grafos/dijkstra.cpp
+
+// Dijkstra
+//
+// encontra menor distancia de x
+// para todos os vertices
+// se ao final do algoritmo d[i] = LINF,
+// entao x nao alcanca i
+//
+// O(m log(n))
+const int MAX= 6;
+const ll LINF = 1e18;
+ll d[MAX];
+vector<pair<int, int>> g[MAX]; // {vizinho, peso}
+
+int n;
+ 
+void dijkstra(int v) {
+	for (int i = 0; i < n; i++) d[i] = LINF;
+	d[v] = 0;
+	priority_queue<pair<ll, int>> pq;
+	pq.emplace(0, v);
+ 
+	while (pq.size()) {
+		auto [ndist, u] = pq.top(); pq.pop();
+		if (-ndist > d[u]) continue;
+ 
+		for (auto [idx, w] : g[u]) if (d[idx] > d[u] + w) {
+			d[idx] = d[u] + w;
+			pq.emplace(-d[idx], idx);
+		}
+	}
+}
 
 int main() {
     int N, M;
@@ -98,7 +84,7 @@ int main() {
     cout << M; 
     
     Graph g(N);
-    Edge e;
+    EdgesList e;
 
     int u, v;
     ll a, l, c;
