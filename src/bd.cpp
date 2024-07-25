@@ -86,7 +86,7 @@ void printGraph(const Graph &g, int N) {
   for (int i = 0; i < N; ++i) {
     // i+ 1 | g[i][j].vertex + 1 = u -> converte índice de volta para 1-based
     cout << "Vértice " << i + 1 << ":";
-    for (int j = 0; j < g[i].size(); j++) {
+    for (int j = 0; j < (int)g[i].size(); j++) {
       cout << " -> (v: " << g[i][j].vertex + 1 << ", edgeID: " << g[i][j].edgeID
            << ")";
     }
@@ -151,7 +151,6 @@ int main() {
   //     // cout << "Vila " << i + 1 << " Distância = " << dist[i] << ", Custo =
   //     " << cost[i] << endl; cout << metric[i] << endl;
   // }
-  // cout<< "Saiu do for";
 
   // (a) Primeiro ano em que todas as distâncias podem ser realizadas ao mesmo
   // tempo
