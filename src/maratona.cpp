@@ -66,18 +66,13 @@ void printGraph(vector<ii> g[], int N) {
 void printEdges(vector<Edge> &e, int M) {
     for (int i = 0; i < M; i++) {
         auto [a, l, c] = e[i];
-        cout << "Aresta " << i + 1 << ": (" << a << ", " << l << ", " << c << ")" << endl;
+        cout << "Aresta " << i<< ": (" << a << ", " << l << ", " << c << ")" << endl;
     }
 }
 
 int main() {
     int N, M;
     cin >> N >> M; // Lê o número de vilas (N) e o número de conexões (M)
-
-    for (int i = 0; i < N; i++) {
-        g[i].clear();
-    }
-    e.clear();
 
     int u, v;
     ll a, l, c;

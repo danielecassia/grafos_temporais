@@ -54,28 +54,46 @@ void printEdges(const EdgesList &e, int M) {
 // entao x nao alcanca i
 //
 // O(m log(n))
-const int MAX= 6;
-const ll LINF = 1e18;
-ll d[MAX];
-vector<pair<int, int>> g[MAX]; // {vizinho, peso}
 
-int n;
+const ll LINF = 1e18;
+// Parâmetro: o vértice de origem a partir do qual as méticas (distância, ano e custo)
+// para todos os outros vértices do grafo serão calculadas
+// vai ter que receber o grafo tbm?
+void dijkstra(int v, Graph &g) {
+    // d é no máximo o tamanho do grafo
+    int N = 4;
+    vector<ll> d(N);
+    // TODO: adaptar pra todas as metricas (distancia, ano e custo)
+    // valor nao pode ser infinito, tem que ser no máximo MAX(d, a, c)
+    // Inicializa todas as distâncias para um valor infinito (LINF)
+    for (int i = 0; i < N; i++) d[i] = LINF;
+    // Define a distância do vértice inicial como 0
+    d[v] = 0;
+    
+    // Cria uma fila de prioridade para armazenar pares de (distância, vértice)
+    // TODO: adaptar pra todas as metricas (distancia, ano e custo)
+    priority_queue<pair<ll, int>> pq;
+    // Adiciona o vértice inicial na fila com distância 0
+    pq.emplace(0, v);
  
-void dijkstra(int v) {
-	for (int i = 0; i < n; i++) d[i] = LINF;
-	d[v] = 0;
-	priority_queue<pair<ll, int>> pq;
-	pq.emplace(0, v);
+    // Enquanto a fila de prioridade não estiver vazia
+    while (pq.size()) {
+        // Remove o elemento do topo da fila (menor distância)
+        auto [ndist, u] = pq.top(); pq.pop();
+        // Se a distância armazenada na fila for maior que a distância conhecida, continua
+        if (-ndist > d[u]) continue;
  
-	while (pq.size()) {
-		auto [ndist, u] = pq.top(); pq.pop();
-		if (-ndist > d[u]) continue;
- 
-		for (auto [idx, w] : g[u]) if (d[idx] > d[u] + w) {
-			d[idx] = d[u] + w;
-			pq.emplace(-d[idx], idx);
-		}
-	}
+        // Para cada vizinho do vértice atual u
+        for (auto [idx, w] : g[u]) {
+            // Se a distância do vizinho for maior que a distância do vértice atual + peso da aresta
+            if (d[idx] > d[u] + w) {
+                // Atualiza a distância do vizinho
+                d[idx] = d[u] + w;
+                // Adiciona o vizinho na fila com a nova distância (negativa para inversão)
+                pq.emplace(-d[idx], idx);
+            }
+        }
+    }
 }
 
 int main() {
