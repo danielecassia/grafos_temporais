@@ -33,7 +33,7 @@ ll getMetric(Connection pv, int metricID, const EdgesList &edges) {
 const ll LINF = 1e18;
 void disjkstra(const int metricID, const string compare, const Graph &g,
                const EdgesList &edges, vector<ll> &weight, const int N,
-               vector<int> &arestas) {
+               vector<int> &used) {
   // Inicializa o vetor de distâncias com um valor muito alto (LINF) para todos
   // os vértices
   weight.assign(N, LINF);
@@ -56,7 +56,9 @@ void disjkstra(const int metricID, const string compare, const Graph &g,
 
     // Melhor distância (até agora)
     weight[vertice] = peso;
-    arestas.push_back(aresta);
+
+    // marca aresta como usada
+    if (aresta >= 0) used[aresta] = true;
 
     // Olha os vizinhos do "vertice"
     for (Connection pv : g[vertice]) {
@@ -133,46 +135,63 @@ int main() {
   // printGraph(g, N);
   // cout << endl;
 
-  // cout << "Dados das Arestas:" << endl;
-  // printEdges(e, M);
+//   cout << "Dados das Arestas:" << endl;
+//   printEdges(e, M);
 
   // costID:
   // 0 = year;
   // 1 = dist;
   // 2 = cost;
 
+  vector<int> used;
+  used.assign(M, false);
+
   // 1. Distância mínima do palácio real -> cada vila
   // TODO: chamar o Dijkstra (dist, +)
   vector<ll> metric;
-  vector<int> arestas;
-  disjkstra(1, "add", g, e, metric, N, arestas);
-
-  // for (int i = 0; i < N; i++) {
-  //     // cout << "Vila " << i + 1 << " Distância = " << dist[i] << ", Custo =
-  //     " << cost[i] << endl; cout << metric[i] << endl;
-  // }
+  disjkstra(1, "add", g, e, metric, N, used);
+  for (int i = 0; i < N; i++) {
+      cout << metric[i] << endl;
+  }
 
   // (a) Primeiro ano em que todas as distâncias podem ser realizadas ao mesmo
   // tempo
   // TODO: das aresta que sao usado no grafo retornado, pegar o MAX dos anos
   ll o_maximo = 0;
   for (int i = 0; i < M; i++) {
-    if (arestas[i] >= 0) {
-        o_maximo = max(o_maximo,e[arestas[i]].year);
+    if (used[i]) {
+        o_maximo = max(o_maximo,e[used[i]].year);
     }
   }
   cout << o_maximo << endl;
 
   // 2. Qual o primeiro ano em que todo o reino é alcançável a partir do palácio
   // real? (todas as vilas são alcançáveis)
-  // TODO: chamar o Dijkstra (ano, MAX)
-  metric.clear();
-  disjkstra(0, "max", g, e, metric, N, arestas);
+  // TODO: chamar o Dijkstra (ano, MAX) e olhar o max dos anos das arestas utilizadas
+  used.assign(M, false);
+  disjkstra(0, "max", g, e, metric, N, used);
+  o_maximo = 0;
+  for (int i = 0; i < M; i++) {
+    if (used[i]) {
+        // cout << arestas[i]<<endl;
+        o_maximo = max(o_maximo,e[used[i]].year);
+    }
+  }
+  cout << o_maximo << endl;
+
 
   // 3. Menor custo pra conectar tds as vilas = uma vila -> qualquer outra?
-  // TODO: chamar o Dijkstra (custo, +)
-  metric.clear();
-  disjkstra(2, "add", g, e, metric, N, arestas);
+  // TODO: chamar o Dijkstra (custo, +) e somar o custo das arestas utilizadas
+  used.assign(M, false);
+  disjkstra(2, "add", g, e, metric, N, used);
+  ll a_soma = 0;
+  for (int i = 0; i < M; i++) {
+    if (used[i]) {
+        // cout << arestas[i]<<endl;
+        a_soma += e[used[i]].cost;
+    }
+  }
+  cout << a_soma << endl;
 
   return 0;
 }
