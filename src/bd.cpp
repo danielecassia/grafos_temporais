@@ -54,14 +54,14 @@ void disjkstra(const int metricID, const string compare, const Graph &g,
     pq.pop();
 
     if (peso > weight[vertice]) continue;
+    // Melhor distância (até agora)
+    weight[vertice] = peso;
     
 
     if(vertice > 0)
       parent[vertice] = pai;  // Atualiza o pai do vizinho
         // cout<< "vertice: "<<vizinho <<" pai: "<<parent[vizinho]<<endl;
 
-    // Melhor distância (até agora)
-    weight[vertice] = peso;
 
     // marca aresta como usada
     // if (aresta >= 0) used[aresta] = true;
