@@ -165,7 +165,7 @@ int main() {
   // TODO: das aresta que sao usado no grafo retornado, pegar o MAX dos anos
   ll o_maximo = 0;
   for (int i = 0; i < N; i++) {
-    // if(i > 0){
+    if(i > 0  && parent[i]>=0){
       for (int j = 0; j < (int)g[parent[i]].size(); j++) {
         if(g[parent[i]][j].vertex == i){
           // cout<< "MAX entre: "<< o_maximo << " e " << e[g[parent[i]][j].edgeID].year<< "= ";
@@ -173,7 +173,7 @@ int main() {
           // cout<< o_maximo<<endl;
         }
       }
-    // }
+    }
   }
   cout << o_maximo << endl;
 
@@ -209,7 +209,7 @@ int main() {
   disjkstra(2, "add", g, e, metric, N, parent);
   ll a_soma = 0;
   for (int i = 0; i < N; i++) {
-    if(i > 0){
+    if(i > 0 && parent[i]>=0){
       for (int j = 0; j < (int)g[parent[i]].size(); j++) {
         if(g[parent[i]][j].vertex == i){
           // cout<< "aresta: "<< g[parent[i]][j].edgeID<< " custo: "<<e[g[parent[i]][j].edgeID].cost <<endl;
