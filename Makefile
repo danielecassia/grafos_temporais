@@ -19,7 +19,7 @@ INCLUDEDIR = include
 OBJDIR     = obj
 BINDIR     = bin
 
-DEPS = bd
+DEPS = prim
 
 SRC := $(addsuffix .cpp, $(DEPS))
 
