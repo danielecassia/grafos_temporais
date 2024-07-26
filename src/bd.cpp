@@ -33,11 +33,12 @@ ll getMetric(Connection pv, int metricID, const EdgesList &edges) {
 const ll LINF = 1e18;
 void disjkstra(const int metricID, const string compare, const Graph &g,
                const EdgesList &edges, vector<ll> &weight, const int N,
-               vector<int> &used) {
+               vector<int> &parent) {
   // Inicializa o vetor de distâncias com um valor muito alto (LINF) para todos
   // os vértices
   weight.assign(N, LINF);
   // priority_queue<pair<int,int>, greater<pair<int,int>>> pq;
+  parent[0] = -1;
 
   // custo, aresta, vertice
   priority_queue<CAV, vector<CAV>, greater<CAV>> pq;
@@ -47,23 +48,28 @@ void disjkstra(const int metricID, const string compare, const Graph &g,
 
   while (!pq.empty()) {
     ll peso = get<0>(pq.top());
-    int aresta = get<1>(pq.top());
+    int pai = get<1>(pq.top());
     int vertice = get<2>(pq.top());
 
     pq.pop();
 
     if (peso > weight[vertice]) continue;
+    
+
+    if(vertice > 0)
+      parent[vertice] = pai;  // Atualiza o pai do vizinho
+        // cout<< "vertice: "<<vizinho <<" pai: "<<parent[vizinho]<<endl;
 
     // Melhor distância (até agora)
     weight[vertice] = peso;
 
     // marca aresta como usada
-    if (aresta >= 0) used[aresta] = true;
+    // if (aresta >= 0) used[aresta] = true;
 
     // Olha os vizinhos do "vertice"
     for (Connection pv : g[vertice]) {
       ll peso_vertice_para_vizinho = getMetric(pv, metricID, edges);
-      int aresta_do_vizinho = pv.edgeID;
+      int pai_do_vizinho = vertice;
       int vizinho = pv.vertex;
 
       // custo usando no vertice no caminho do vizinho
@@ -77,8 +83,8 @@ void disjkstra(const int metricID, const string compare, const Graph &g,
       // Se w melhora caminho do vizinho
       if (weight[vizinho] > w) {
         // Ponho na lista de sugestões
-        // {custo, aresta, vertice}
-        pq.push({w, aresta_do_vizinho, vizinho});
+        // {custo, pai, vertice}
+        pq.push({w, pai_do_vizinho, vizinho});
       }
     }
   }
@@ -135,60 +141,81 @@ int main() {
   // printGraph(g, N);
   // cout << endl;
 
-//   cout << "Dados das Arestas:" << endl;
-//   printEdges(e, M);
+  // cout << "Dados das Arestas:" << endl;
+  // printEdges(e, M);
 
   // costID:
   // 0 = year;
   // 1 = dist;
   // 2 = cost;
 
-  vector<int> used;
-  used.assign(M, false);
+ vector<int> parent;
+  parent.resize(N);
 
   // 1. Distância mínima do palácio real -> cada vila
   // TODO: chamar o Dijkstra (dist, +)
   vector<ll> metric;
-  disjkstra(1, "add", g, e, metric, N, used);
+  disjkstra(1, "add", g, e, metric, N, parent);
   for (int i = 0; i < N; i++) {
-      cout << metric[i] << endl;
+    cout << metric[i] << endl;
   }
 
   // (a) Primeiro ano em que todas as distâncias podem ser realizadas ao mesmo
   // tempo
   // TODO: das aresta que sao usado no grafo retornado, pegar o MAX dos anos
   ll o_maximo = 0;
-  for (int i = 0; i < M; i++) {
-    if (used[i]) {
-        o_maximo = max(o_maximo,e[used[i]].year);
-    }
+  for (int i = 0; i < N; i++) {
+    // if(i > 0){
+      for (int j = 0; j < (int)g[parent[i]].size(); j++) {
+        if(g[parent[i]][j].vertex == i){
+          // cout<< "MAX entre: "<< o_maximo << " e " << e[g[parent[i]][j].edgeID].year<< "= ";
+          o_maximo = max(o_maximo,e[g[parent[i]][j].edgeID].year);
+          // cout<< o_maximo<<endl;
+        }
+      }
+    // }
   }
   cout << o_maximo << endl;
 
   // 2. Qual o primeiro ano em que todo o reino é alcançável a partir do palácio
   // real? (todas as vilas são alcançáveis)
   // TODO: chamar o Dijkstra (ano, MAX) e olhar o max dos anos das arestas utilizadas
-  used.assign(M, false);
-  disjkstra(0, "max", g, e, metric, N, used);
+  parent.assign(N, -1);
+  disjkstra(0, "max", g, e, metric, N, parent);
   o_maximo = 0;
-  for (int i = 0; i < M; i++) {
-    if (used[i]) {
-        // cout << arestas[i]<<endl;
-        o_maximo = max(o_maximo,e[used[i]].year);
+  for (int i = 0; i < N; i++) {
+    if(i > 0 && parent[i]>=0){
+      for (int j = 0; j < (int)g[parent[i]].size(); j++) {
+        if(g[parent[i]][j].vertex == i){
+          // cout<< "aresta: "<< g[parent[i]][j].edgeID<< " custo: "<<e[g[parent[i]][j].edgeID].cost <<endl;
+          o_maximo = max(o_maximo,e[g[parent[i]][j].edgeID].year);
+        }
+      }
     }
   }
+  
+  // for (int i = 0; i < M; i++) {
+  //   if (parent[i]) {
+  //       // cout << arestas[i]<<endl;
+  //       o_maximo = max(o_maximo,e[parent[i]].year);
+  //   }
+  // }
   cout << o_maximo << endl;
 
 
   // 3. Menor custo pra conectar tds as vilas = uma vila -> qualquer outra?
   // TODO: chamar o Dijkstra (custo, +) e somar o custo das arestas utilizadas
-  used.assign(M, false);
-  disjkstra(2, "add", g, e, metric, N, used);
+  parent.assign(N, -1);
+  disjkstra(2, "add", g, e, metric, N, parent);
   ll a_soma = 0;
-  for (int i = 0; i < M; i++) {
-    if (used[i]) {
-        // cout << arestas[i]<<endl;
-        a_soma += e[used[i]].cost;
+  for (int i = 0; i < N; i++) {
+    if(i > 0){
+      for (int j = 0; j < (int)g[parent[i]].size(); j++) {
+        if(g[parent[i]][j].vertex == i){
+          // cout<< "aresta: "<< g[parent[i]][j].edgeID<< " custo: "<<e[g[parent[i]][j].edgeID].cost <<endl;
+          a_soma += e[g[parent[i]][j].edgeID].cost;
+        }
+      }
     }
   }
   cout << a_soma << endl;
